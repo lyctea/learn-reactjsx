@@ -36,6 +36,22 @@
                 var leftd = todoList.todos.reduce(function (acc,todo) {
                     return todo.completed? acc : acc + 1;
                 },0);
+                //li组件子模块
+                var listItem = todoList.todos.map(function (todo, i) {
+                    var className = "";
+                    if(todo.completed){
+                        className = "completed";
+                    }
+
+                    return <li key={i} className={className}>
+                        <div className="view">
+                            <input type="checkbox" className="toggle" checked=""/>
+                            <label>{todo.title}</label>
+                            <button className="destroy"></button>
+                        </div>
+                    </li>;
+                });
+
 
                 return(
                     <div>
@@ -46,20 +62,7 @@
                         <section className="main">
                             <input type="checkbox" className="toggle-all" />
                             <ul className="todo-list">
-                                {todoList.todos.map(function (todo, i) {
-                                    var className = "";
-                                    if(todo.completed){
-                                        className = "completed";
-                                    }
-
-                                    return <li key={i} className={className}>
-                                                <div className="view">
-                                                    <input type="checkbox" className="toggle" checked=""/>
-                                                    <label>{todo.title}</label>
-                                                    <button className="destroy"></button>
-                                                </div>
-                                            </li>;
-                                })}
+                                {listItem}
                             </ul>
                         </section>
                         <footer className="footer">
