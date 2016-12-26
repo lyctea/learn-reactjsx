@@ -9,9 +9,11 @@
     <script src="./react-15.0.2/build/react.js"></script>
     <script src="./react-15.0.2/build/react-dom.js"></script>
     <script src="./babel-browser.js"></script>
+    <link rel="stylesheet" href="./css/app.css">
+    <link rel="stylesheet" href="./css/base.css">
 </head>
-<body>
-    <div id="example"></div>
+<body class="lean-bar">
+    <section id="AppRoot" class="todoapp"></section>
     <script type="text/babel">
         //原始数据
         var todoList = {
@@ -37,16 +39,51 @@
 
                 return(
                     <div>
-                        <header><h1>test</h1></header>
-                        <section></section>
-                        <footer></footer>
+                        <header className="header">
+                            <h1>{todoList.name}</h1>
+                            <input className="new-todo" value="" placeholder="What needs to be done?"/>
+                        </header>
+                        <section className="main">
+                            <input type="checkbox" className="toggle-all" />
+                            <ul className="todo-list">
+                                {todoList.todos.map(function (todo, i) {
+                                    var className = "";
+                                    if(todo.completed){
+                                        className = "completed";
+                                    }
+
+                                    return <li key={i} className={className}>
+                                                <div className="view">
+                                                    <input type="checkbox" className="toggle" checked=""/>
+                                                    <label>{todo.title}</label>
+                                                    <button className="destroy"></button>
+                                                </div>
+                                            </li>;
+                                })}
+                            </ul>
+                        </section>
+                        <footer className="footer">
+                            <span className="todo-count">
+                                <strong>{leftd}</strong><span></span><span>items</span><span>left</span>
+                            </span>
+                            <ul className="filters">
+                                <li><a href="#/" className="selected">All</a></li>
+                                <li><a href="#/active" className="">Active</a></li>
+                                <li><a href="#/completed" className="">Completed</a></li>
+                            </ul>
+                            <button className="clear-completed">
+                                Clear completed
+                            </button>
+                        </footer>
                     </div>
                 );
             }
         });
-
-        ReactDOM.render(<TodoList />,document.getElementById("example"));
-
+        /**
+         * render 到 DOM
+         * @type {String}
+         */
+        ReactDOM.render(<TodoList />,document.getElementById("AppRoot"));
     </script>
 </body>
 </html>
