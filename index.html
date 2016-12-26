@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>react todo</title>
+    <script src="./react-15.0.2/build/react.js"></script>
+    <script src="./react-15.0.2/build/react-dom.js"></script>
+    <script src="./babel-browser.js"></script>
+</head>
+<body>
+    <div id="example"></div>
+    <script type="text/babel">
+        //原始数据
+        var todoList = {
+            name: "todos",
+            todos: [{
+                completed: false,
+                title: "learn english"
+            },{
+                completed: false,
+                title: "learn c++"
+            },{
+                completed: true,
+                title: "learn java"
+            }]
+        };
+        //编写todo组件
+        var TodoList = React.createClass({
+            render: function () {
+                //计算未完成事项数量
+                var leftd = todoList.todos.reduce(function (acc,todo) {
+                    return todo.completed? acc : acc + 1;
+                },0);
+
+                return(
+                    <div>
+                        <header><h1>test</h1></header>
+                        <section></section>
+                        <footer></footer>
+                    </div>
+                );
+            }
+        });
+
+        ReactDOM.render(<TodoList />,document.getElementById("example"));
+
+    </script>
+</body>
+</html>
