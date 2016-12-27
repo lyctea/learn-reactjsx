@@ -24,14 +24,24 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
-              <caret line="51" column="24" lean-forward="false" selection-start-line="51" selection-start-column="24" selection-end-line="51" selection-end-column="24" />
+            <state relative-caret-position="66">
+              <caret line="123" column="51" lean-forward="true" selection-start-line="123" selection-start-column="51" selection-end-line="123" selection-end-column="51" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>deleteTaskHandel</find>
+      <find>switchTaskCompletedHandel</find>
+      <find>switchType</find>
+      <find>switchListTypeHandel</find>
+      <find>onChange</find>
+      <find>changeHandel</find>
+    </findStrings>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -47,9 +57,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="34" />
-    <option name="y" value="24" />
-    <option name="width" value="1516" />
+    <option name="x" value="567" />
+    <option name="y" value="213" />
+    <option name="width" value="1526" />
     <option name="height" value="1004" />
   </component>
   <component name="ProjectView">
@@ -166,15 +176,16 @@
       <updated>1482714886785</updated>
       <workItem from="1482714888441" duration="1913000" />
       <workItem from="1482716933262" duration="1276000" />
-      <workItem from="1482727759498" duration="186000" />
+      <workItem from="1482727759498" duration="8880000" />
+      <workItem from="1482761632972" duration="10554000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3375000" />
+    <option name="totallyTimeSpent" value="22623000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="34" y="24" width="1516" height="1004" extended-state="0" />
+    <frame x="567" y="213" width="1526" height="1004" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.45142856" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -214,11 +225,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/index.js" />
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="51" column="24" lean-forward="false" selection-start-line="51" selection-start-column="24" selection-end-line="51" selection-end-column="24" />
+        <state relative-caret-position="66">
+          <caret line="123" column="51" lean-forward="true" selection-start-line="123" selection-start-column="51" selection-end-line="123" selection-end-column="51" />
           <folding />
         </state>
       </provider>

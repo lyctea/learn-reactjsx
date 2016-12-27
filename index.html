@@ -9,8 +9,8 @@
     <script src="./react-15.0.2/build/react.js"></script>
     <script src="./react-15.0.2/build/react-dom.js"></script>
     <script src="./babel-browser.js"></script>
-    <link rel="stylesheet" href="./css/app.css">
     <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/app.css">
 </head>
 <body class="lean-bar">
     <section id="AppRoot" class="todoapp"></section>
@@ -29,64 +29,224 @@
                 title: "learn java"
             }]
         };
-        //编写todo组件
-        var TodoList = React.createClass({
+
+
+        //App 组件：整个页面的最完成组件
+        var App = React.createClass({
+            getInitialState: function(){
+                return {
+                    addTaskTitle: '',
+                    todolist: todoList,
+                    type: 'all'
+                }
+            },
+            /*表单输入*/
+            changeHandel: function (event) {
+                  this.setState({value: event.target.value});
+            },
+
+            /*添加任务*/
+            addTaskHandel: function (event) {
+                //获取到输入框,通过查找refs数组
+                let task = this.refs.addTask;
+                if(task.value == ''){
+                    console.error("don't add empty task!");
+                    return false;
+                }
+                this.setState(function () {
+                    let todos = this.state.todolist.todos,
+                        todo = {
+                            completed: false,
+                            title: task.value
+                        };
+                    todos.push(todo);
+                    return todo;
+                })
+            },
+            /*删除任务*/
+            deleteTaskHandel: function (index) {
+                return function () {
+                    let todos = this.state.todolist.todos,
+                        todolist = {
+                            todolist: {
+                                name: "todos",
+                                todos: []
+                            }
+                        };
+                    todos.splice(index, 1),todolist.todolist.todos = todos;
+
+                    this.setState(todolist);
+                }.bind(this);
+            },
+            /*切换任务*/
+            switchTaskCompletedHandel: function (index) {
+                return function () {
+                    this.setState(function () {
+                        let todolist = this.state.todolist;
+                        todolist['todos'][index]['completed'] = !todolist['todos'][index]['completed'];
+                        return todolist;
+                    });
+                }.bind(this);
+            },
+            /*切换任务类型*/
+            switchListTypeHandel: function(){
+                return function(hash, event){
+                    let type = '';
+                    switch(hash){
+                        case 'active':
+                            type = 'active';
+                            break;
+                        case 'completed':
+                            type = 'completed';
+                            break;
+                        default :
+                            type = 'all';
+                            break;
+                    }
+                    this.setState({type: type});
+                }.bind(this);
+            },
+
+            /*清除已完成*/
+            clearCompleted: function(){
+                return function(){
+                    let todolist = this.state.todolist,
+                        todos = todolist.todos.filter(function(todo){
+                            return !todo.completed;
+                        });
+                    todolist.todos = todos;
+
+                    this.setState(todolist);
+                }.bind(this);
+            },
+
             render: function () {
-                //计算未完成事项数量
-                var leftd = todoList.todos.reduce(function (acc,todo) {
+                var todolist = this.state.todolist;
+                //统计未完成事项
+                var lefted = todolist.todos.reduce(function (acc, todo) {
                     return todo.completed? acc : acc + 1;
                 },0);
-                //li组件子模块
-                var listItem = todoList.todos.map(function (todo, i) {
-                    var className = "";
-                    if(todo.completed){
-                        className = "completed";
-                    }
+                //判断是否需要显示页脚
+                let footer = todolist.todos.length ? <Footer lefted={lefted}
+                type={this.state.type} clearCom={this.clearCompleted()} switchType={this.switchListTypeHandel()}/> : "";
 
-                    return <li key={i} className={className}>
-                        <div className="view">
-                            <input type="checkbox" className="toggle" checked=""/>
-                            <label>{todo.title}</label>
-                            <button className="destroy"></button>
+                return <div ref="app">
+                    <section className="main">
+                        <Header title={todolist.name} />
+                        <div className="add-taskItem-box">
+                            <input ref="addTask" className="new-todo"
+                                   placeholder="What needs to be done?"
+                                   defaultValue={this.state.addTaskTitle}
+                                   onChange={this.changeHandel}/>
+                            <button className="add-taskItem" onClick={this.addTaskHandel}>Add</button>
                         </div>
-                    </li>;
-                });
-
-
-                return(
-                    <div>
-                        <header className="header">
-                            <h1>{todoList.name}</h1>
-                            <input className="new-todo" value="" placeholder="What needs to be done?"/>
-                        </header>
-                        <section className="main">
-                            <input type="checkbox" className="toggle-all" />
-                            <ul className="todo-list">
-                                {listItem}
-                            </ul>
-                        </section>
-                        <footer className="footer">
-                            <span className="todo-count">
-                                <strong>{leftd}</strong><span></span><span>items</span><span>left</span>
-                            </span>
-                            <ul className="filters">
-                                <li><a href="#/" className="selected">All</a></li>
-                                <li><a href="#/active" className="">Active</a></li>
-                                <li><a href="#/completed" className="">Completed</a></li>
-                            </ul>
-                            <button className="clear-completed">
-                                Clear completed
-                            </button>
-                        </footer>
-                    </div>
-                );
+                        <TodoList todos={todolist.todos} type={this.state.type}
+                                  delTask={this.deleteTaskHandel}
+                                  comTask={this.switchTaskCompletedHandel} />
+                        {footer}
+                    </section>
+                </div>
             }
         });
+
+        //Header 组件：头部输入组件
+        var Header = React.createClass({
+            render: function () {
+                return <header className="header">
+                         <h1>{this.props.title}</h1>
+                       </header>
+            }
+        })
+
+        //TodoList 组件：列表组件
+        var TodoList = React.createClass({
+            render: function () {
+                var that = this;
+                return <ul className="todo-list">
+                    {this.props.todos.map(function (todo, i) {
+                        switch(that.props.type){
+                            case "all":
+                                return <TodoItem data={todo} key={i}
+                                                 delTask={that.props.delTask(i)}
+                                                 comTask={that.props.comTask(i)}/>
+                                break;
+                            case "active":
+                                if (!todo.completed){
+                                    return <TodoItem data={todo} key={i}
+                                                     delTask={that.props.delTask(i)}
+                                                     comTask={that.props.comTask(i)}/>
+                                };
+                                break;
+                            case "completed":
+                                if(todo.completed){
+                                    return <TodoItem data={todo} key={i}
+                                                     delTask={that.props.delTask(i)}
+                                                     comTask={that.props.comTask(i)}/>
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    })}
+                </ul>
+            }
+        })
+
+        //TodoItem 组件: 列表项
+        var TodoItem = React.createClass({
+            render: function () {
+                var todo = this.props.data;
+                var className = todo.completed? "completed" : "";
+                return <li className={className}>
+                    <div className="view">
+                        <input type="checkbox" className="toggle"
+                                onClick={this.props.comTask}
+                                checked={todo.completed}/>
+                        <label>{todo.title}</label>
+                        <button ref="deleteTask" className="destroy" onClick={this.props.delTask}></button>
+                    </div>
+                    <input type="text" className="edit" value={todo.title}/>
+                </li>
+            }
+        })
+
+        //Footer 组件：底部操作组件
+        var Footer = React.createClass({
+            render: function () {
+                //按类型检测
+                let type = ["","",""];
+                switch (this.props.type){
+                    case "completed":
+                        type[2] ="selected";
+                        break;
+                    case "active":
+                        type[1] = "selected";
+                        break;
+                    default:
+                        type[0] = "selected";
+                        break
+                }
+                return <footer className="footer">
+                    <span className="todo-count">
+                        <strong> {this.props.lefted} </strong><span>  </span><span>  items  </span><span>  left  </span>
+                    </span>
+                    <ul className="filters">
+                        <li><a href="#/" className={type[0]} onClick={this.props.switchType.bind(null,'all')}>All</a></li>
+                        <li><a href="#/active" className={type[1]} onClick={this.props.switchType.bind(null,'active')}>Active</a></li>
+                        <li><a href="#/completed" className={type[2]} onClick={this.props.switchType.bind(null,'completed')}>Completed</a></li>
+                    </ul>
+                    <button className="clear-completed" onClick={this.props.clearCom}>
+                        Clear completed
+                    </button>
+                </footer>
+            }
+        })
+
         /**
          * render 到 DOM
          * @type {String}
          */
-        ReactDOM.render(<TodoList />,document.getElementById("AppRoot"));
+        ReactDOM.render(<App />,document.getElementById("AppRoot"));
     </script>
 </body>
 </html>
